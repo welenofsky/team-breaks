@@ -131,7 +131,6 @@ const nflTeams = [
     'logo': dolphins,
     'slug': 'miami-dolphins'
   },
-  // Create an object for each remaining team imported
   {
     'label': 'Minnesota Vikings',
     'logo': vikings,
@@ -202,6 +201,10 @@ const selectedTeams = ref([]);
 
 const toggleTeam = (team) => {
   if (selectedTeams.value.includes(team.slug)) {
+    // Confirm Removals
+    if (confirm(`Are you sure you want to remove ${team.label}?`) === false) {
+      return;
+    }
     selectedTeams.value = selectedTeams.value.filter((slug) => slug !== team.slug);
   } else {
     selectedTeams.value.push(team.slug);
@@ -216,6 +219,10 @@ const toggleTeam = (team) => {
       <img class="logo" :src="team.logo" alt="">
       <img v-if="selectedTeams.includes(team.slug)" class="x" src="./assets/red-x.svg" alt="">
     </div>
+  </div>
+  <div class="stat-box">
+    <h2>Teams Remaining:</h2>
+    <p class="remaining">{{ 32 - selectedTeams.length }}</p>
   </div>
 </template>
 
@@ -241,6 +248,22 @@ const toggleTeam = (team) => {
     height: 100%;
     object-fit: cover;
     object-position: center center;
+  }
+
+  .logo {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .stat-box {
+    text-align: center;
+    margin: 2rem 0;
+  }
+  p.remaining {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
   }
 
 </style>
