@@ -199,6 +199,11 @@ const nflTeams = [
 ];
 const selectedTeams = ref([]);
 
+// Pull selected teams from local storage if they were set
+if (localStorage.getItem('selectedTeams')) {
+  selectedTeams.value = JSON.parse(localStorage.getItem('selectedTeams'));
+}
+
 const toggleTeam = (team) => {
   if (selectedTeams.value.includes(team.slug)) {
     // Confirm Removals
@@ -209,24 +214,44 @@ const toggleTeam = (team) => {
   } else {
     selectedTeams.value.push(team.slug);
   }
+
+  // Save to local storage
+  localStorage.setItem('selectedTeams', JSON.stringify(selectedTeams.value));
+};
+
+const clearSelection = () => {
+  if (confirm('Are you sure you want to clear all selections?') === false) {
+    return;
+  }
+  selectedTeams.value = [];
+  localStorage.removeItem('selectedTeams');
 };
 
 </script>
 
 <template>
-  <div class="grid">
-    <div @click="() => toggleTeam(team)" v-for="team in nflTeams" class="nfl-team" :key="team.slug">
-      <img class="logo" :src="team.logo" alt="">
-      <img v-if="selectedTeams.includes(team.slug)" class="x" src="./assets/red-x.svg" alt="">
+  <div id="team-picker">
+    <div class="grid">
+      <div @click="() => toggleTeam(team)" v-for="team in nflTeams" class="nfl-team" :key="team.slug">
+        <img class="logo" :src="team.logo" alt="">
+        <img v-if="selectedTeams.includes(team.slug)" class="x" src="./assets/red-x.svg" alt="">
+      </div>
     </div>
-  </div>
-  <div class="stat-box">
-    <h2>Teams Remaining:</h2>
-    <p class="remaining">{{ 32 - selectedTeams.length }}</p>
+    <div class="stat-box">
+      <h2>Teams Remaining:</h2>
+      <p class="remaining">{{ 32 - selectedTeams.length }}</p>
+    </div>
+
+    <div class="actions">
+      <button @click="clearSelection">Reset</button>
+    </div>
   </div>
 </template>
 
 <style scoped>
+  #team-picker {
+    max-width: 500px;
+  }
   /** 8x4 grid */
   .grid {
     display: grid;
@@ -264,6 +289,17 @@ const toggleTeam = (team) => {
     font-size: 2rem;
     font-weight: bold;
     text-align: center;
+  }
+
+  button {
+    display: block;
+    margin: 0 auto;
+    padding: 0.5rem 1rem;
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
 
 </style>
