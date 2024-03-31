@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue';
+import JSConfetti from 'js-confetti'
+import { ref, onMounted } from 'vue';
 
 import cardinals from './assets/nfl-logos/cardinals.gif';
 import falcons from './assets/nfl-logos/falcons.gif';
@@ -198,6 +199,11 @@ const nflTeams = [
   }
 ];
 const selectedTeams = ref([]);
+const confetti = ref(null);
+
+onMounted(() => {
+  confetti.value = new JSConfetti();
+});
 
 // Pull selected teams from local storage if they were set
 if (localStorage.getItem('selectedTeams')) {
@@ -213,6 +219,21 @@ const toggleTeam = (team) => {
     selectedTeams.value = selectedTeams.value.filter((slug) => slug !== team.slug);
   } else {
     selectedTeams.value.push(team.slug);
+  }
+
+  if (selectedTeams.value.length === 32) {
+    // Celebrate for 30 seconds
+    let celebrations = 0;
+    let interval = setInterval(() => {
+      if (celebrations === 5) {
+        clearInterval(interval);
+        return;
+      }
+      confetti.value.addConfetti({
+        confettiNumber: 1000,
+      });
+      celebrations++;
+    }, 1000);
   }
 
   // Save to local storage
@@ -252,7 +273,7 @@ const clearSelection = () => {
   #team-picker {
     max-width: 500px;
   }
-  /** 8x4 grid */
+
   .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
