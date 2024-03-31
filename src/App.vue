@@ -261,6 +261,7 @@ const clearSelection = () => {
 
   .nfl-team {
     position: relative;
+    cursor: pointer;
   }
 
   .x {
