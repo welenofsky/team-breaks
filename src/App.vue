@@ -281,6 +281,9 @@ const clearSelection = () => {
     position: relative;
     cursor: pointer;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .x {
