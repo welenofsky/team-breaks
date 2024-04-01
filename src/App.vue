@@ -212,7 +212,6 @@ if (localStorage.getItem('selectedTeams')) {
 
 const toggleTeam = (team) => {
   if (selectedTeams.value.includes(team.slug)) {
-    // Confirm Removals
     if (confirm(`Are you sure you want to remove ${team.label}?`) === false) {
       return;
     }
@@ -222,7 +221,6 @@ const toggleTeam = (team) => {
   }
 
   if (selectedTeams.value.length === 32) {
-    // Celebrate for 30 seconds
     let celebrations = 0;
     let interval = setInterval(() => {
       if (celebrations === 5) {
@@ -236,7 +234,6 @@ const toggleTeam = (team) => {
     }, 1000);
   }
 
-  // Save to local storage
   localStorage.setItem('selectedTeams', JSON.stringify(selectedTeams.value));
 };
 
@@ -260,7 +257,7 @@ const clearSelection = () => {
     </div>
     <div class="stat-box">
       <h2>Teams Remaining:</h2>
-      <p class="remaining">{{ 32 - selectedTeams.length }}</p>
+      <p class="remaining">{{ Math.max(0, 32 - selectedTeams.length) }}</p>
     </div>
 
     <div class="actions">
@@ -307,8 +304,12 @@ const clearSelection = () => {
     text-align: center;
     margin: 2rem 0;
   }
-  p.remaining {
+  h2 {
     font-size: 2rem;
+    line-height: 1;
+  }
+  p.remaining {
+    font-size: 3rem;
     font-weight: bold;
     text-align: center;
   }
