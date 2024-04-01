@@ -251,8 +251,8 @@ const clearSelection = () => {
   <div id="team-picker">
     <div class="grid">
       <div @click="() => toggleTeam(team)" v-for="team in nflTeams" class="nfl-team" :key="team.slug">
-        <img class="logo" :src="team.logo" alt="">
-        <img v-if="selectedTeams.includes(team.slug)" class="x" src="./assets/red-x.svg" alt="">
+        <img class="logo" :src="team.logo":alt="team.label" draggable="false">
+        <img v-if="selectedTeams.includes(team.slug)" class="x" src="./assets/red-x.svg" alt="" draggable="false">
       </div>
     </div>
     <div class="stat-box">
@@ -280,6 +280,7 @@ const clearSelection = () => {
   .nfl-team {
     position: relative;
     cursor: pointer;
+    user-select: none;
   }
 
   .x {
