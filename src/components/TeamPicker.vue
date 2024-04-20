@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, computed} from "vue";
 import JSConfetti from "js-confetti";
 
 interface Team {
@@ -8,20 +8,33 @@ interface Team {
   logo: string,
 }
 
-defineProps<{
+enum Break {
+  "NBA" = "NBA",
+  "NFL" = "NFL",
+  "NHL" = "NHL",
+  "MLB" = "MLB",
+}
+
+const props = defineProps<{
   teams: Team[],
+  break: Break,
 }>()
 
 const selectedTeams = ref([]);
 const confetti = ref(null);
+const storageKey = `selected-teams-${props.break}`;
 
 onMounted(() => {
   confetti.value = new JSConfetti();
 });
 
+const teamsRemaining = computed(() => {
+  return Math.max(0, props.teams.length - selectedTeams.value.length);
+});
+
 // Pull selected teams from local storage if they were set
-if (localStorage.getItem('selectedTeams')) {
-  selectedTeams.value = JSON.parse(localStorage.getItem('selectedTeams'));
+if (localStorage.getItem(storageKey)) {
+  selectedTeams.value = JSON.parse(localStorage.getItem(storageKey));
 }
 
 const toggleTeam = (team) => {
@@ -48,7 +61,7 @@ const toggleTeam = (team) => {
     }, 1000);
   }
 
-  localStorage.setItem('selectedTeams', JSON.stringify(selectedTeams.value));
+  localStorage.setItem(storageKey, JSON.stringify(selectedTeams.value));
 };
 
 const clearSelection = () => {
@@ -56,7 +69,7 @@ const clearSelection = () => {
     return;
   }
   selectedTeams.value = [];
-  localStorage.removeItem('selectedTeams');
+  localStorage.removeItem(storageKey);
 };
 </script>
 
@@ -65,12 +78,12 @@ const clearSelection = () => {
     <div class="grid">
       <div @click="() => toggleTeam(team)" v-for="team in teams" class="team" :key="team.slug">
         <img class="logo" :src="team.logo":alt="team.label" draggable="false">
-        <img v-if="selectedTeams.includes(team.slug)" class="x" src="./assets/red-x.svg" alt="" draggable="false">
+        <img v-if="selectedTeams.includes(team.slug)" class="x" src="@/assets/red-x.svg" alt="" draggable="false">
       </div>
     </div>
     <div class="stat-box">
       <h2>Teams Remaining:</h2>
-      <p class="remaining">{{ Math.max(0, 32 - selectedTeams.length) }}</p>
+      <p class="remaining">{{ teamsRemaining }}</p>
     </div>
 
     <div class="actions">
