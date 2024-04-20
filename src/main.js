@@ -16,8 +16,10 @@ const routes = [
     { path: '/nba', component: NBAView },
 ]
 
+const base = import.meta.env.BASE_URL
+
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(base),
     routes,
 })
 
