@@ -109,6 +109,7 @@ const clearSelection = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #FFF;
 }
 .x {
   position: absolute;
