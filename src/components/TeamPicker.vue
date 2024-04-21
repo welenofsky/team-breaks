@@ -74,7 +74,7 @@ const clearSelection = () => {
 </script>
 
 <template>
-  <div id="team-picker">
+  <div id="team-picker" :class="`team-picker-${props.break.toLowerCase()}`">
     <div class="grid">
       <div @click="() => toggleTeam(team)" v-for="team in teams" class="team" :key="team.slug">
         <img class="logo" :src="team.logo":alt="team.label" draggable="false">
@@ -96,10 +96,32 @@ const clearSelection = () => {
 #team-picker {
   max-width: 500px;
 }
+@media (min-width: 900px) {
+  #team-picker {
+    max-width: 700px;
+  }
+}
+
+@media (min-width: 1200px) {
+  #team-picker {
+    max-width: 750px;
+  }
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
+}
+
+.team-picker-nba .grid {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media (min-width: 900px) {
+  .team-picker-nba .grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 .team {
