@@ -1,7 +1,7 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import { createWebHistory, createRouter } from 'vue-router'
+import { createWebHashHistory, createRouter } from 'vue-router'
 
 import App from './App.vue'
 
@@ -19,7 +19,7 @@ const routes = [
 const base = import.meta.env.BASE_URL
 
 const router = createRouter({
-    history: createWebHistory(base),
+    history: createWebHashHistory(base),
     routes,
 })
 
